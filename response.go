@@ -39,18 +39,18 @@ type JsonRet struct {
 func Render(c *gin.Context, code int, msg string, obj interface{}) {
 	s := RetStruct(code, msg, obj)
 
-	gLog.Json("jsonBean", s)
+	gLog.Json("json struct", s)
 
 	c.JSON(http.StatusOK, s)
 }
 
 //output json string with message
-func RenderNoData(c *gin.Context, code int, mess string) {
+func RenderMess(c *gin.Context, code int, mess string) {
 	Render(c, code, mess, nil)
 }
 
 //output json string with default message
-func RenderNoMess(c *gin.Context, code int, obj interface{}) {
+func RenderData(c *gin.Context, code int, obj interface{}) {
 	Render(c, code, "", obj)
 }
 
@@ -67,9 +67,9 @@ func RenderCode(c *gin.Context, code int) {
 //output json string with status
 func RenderStatus(c *gin.Context, errCode int, status bool) {
 	if status {
-		RenderNoData(c, successCode, MESS_SUCCESS)
+		RenderMess(c, successCode, MESS_SUCCESS)
 	} else {
-		RenderNoData(c, errCode, MESS_FAIL)
+		RenderMess(c, errCode, MESS_FAIL)
 	}
 }
 
