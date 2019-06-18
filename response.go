@@ -12,7 +12,7 @@ const (
 	MESS_FAIL    = "fail"
 )
 
-type BeanEmpty struct {
+type Empty struct {
 }
 
 var successCode int = 200
@@ -23,23 +23,25 @@ func SetSuccessCode(code int) {
 }
 
 //base bean
-type JsonBaseBean struct {
+type JsonRetBase struct {
 	Code      int    `json:"code"`
 	Msg       string `json:"msg"`
 	Timestamp int64  `json:"timestamp"`
 }
 
-//json return bean
-type JsonRetBean struct {
-	JsonBaseBean
+//json return struct
+type JsonRet struct {
+	JsonRetBase
 	Data interface{} `json:"data"`
 }
 
 //output json string
 func Render(c *gin.Context, code int, msg string, obj interface{}) {
-	bean := RetStruct(code, msg, obj)
-	gLog.Json("jsonBean", bean)
-	c.JSON(http.StatusOK, bean)
+	s := RetStruct(code, msg, obj)
+
+	gLog.Json("jsonBean", s)
+
+	c.JSON(http.StatusOK, s)
 }
 
 //output json string with message
@@ -71,9 +73,9 @@ func RenderStatus(c *gin.Context, errCode int, status bool) {
 	}
 }
 
-//get ret bean
-func RetStruct(code int, msg string, obj interface{}) JsonRetBean {
-	var bean JsonRetBean
+//get ret struct
+func RetStruct(code int, msg string, obj interface{}) JsonRet {
+	var bean JsonRet
 
 	bean.Code = code
 	bean.Msg = msg
@@ -82,7 +84,7 @@ func RetStruct(code int, msg string, obj interface{}) JsonRetBean {
 	if obj != nil {
 		bean.Data = obj
 	} else {
-		bean.Data = BeanEmpty{}
+		bean.Data = Empty{}
 	}
 
 	return bean
